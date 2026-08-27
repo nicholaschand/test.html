@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<!--
+  TRADIE WEBSITE TEMPLATE
+  ------------------------
+  How to use this file:
+  1. Find & replace anything in [SQUARE BRACKETS] with the client's real details.
+  2. Colors live as CSS variables near the top of <style> — change those 6 hex
+     values to re-theme the whole site for a new client in one go.
+  3. Services / work / testimonials are repeated card blocks — copy, paste,
+     and edit a card to add one; delete a card to remove one.
+  4. The contact form uses Netlify Forms (data-netlify="true" below). No swap
+     needed and no activation step, Netlify auto-detects the form the moment
+     this file is deployed to a Netlify site, and every submission fires the
+     lead-response automation in n8n. Just deploy as-is.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[BUSINESS NAME] , [SERVICE AREA]</title>
+
+<!-- Fonts: swap these Google Fonts links for different typefaces if you want -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  /* ===== COLOR & TYPE TOKENS =====
+     Change these values to re-skin the whole site for a new client.
+     ink/panel/steel = backgrounds, paper = text, copper = brand accent. */
+  :root{
+    --ink:#10151c;
+    --panel:#1a2330;
+    --steel:#242e3b;
+    --paper:#ede7dd;
+    --paper-dim:#c9c2b4;
+    --copper:#c17a43;
+    --copper-bright:#e0985c;
+    --safety:#e8b93f;
+    --line:rgba(237,231,221,0.14);
+  }
+
+  /* ===== RESET / BASE ===== */
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;} /* smooth scroll for #anchor links like "Contact" in the nav */
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'IBM Plex Sans',sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .mono{font-family:'IBM Plex Mono',monospace;} /* used for job codes, phone numbers */
+  .display{font-family:'Big Shoulders Display',sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:0.01em;}
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 24px;} /* shared content width, reused everywhere */
+  :focus-visible{outline:2px solid var(--copper-bright);outline-offset:3px;} /* keyboard nav visibility */
+
+  /* ===== HEADER / NAV ===== */
+  header{
+    position:sticky;top:0;z-index:50; /* stays pinned while scrolling */
+    background:rgba(16,21,28,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;max-width:1100px;margin:0 auto;}
+  .logo{display:flex;align-items:center;gap:10px;}
+  .logo-mark{
+    width:34px;height:34px;border:2px solid var(--copper);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Big Shoulders Display',sans-serif;font-weight:900;
+    color:var(--copper-bright);font-size:18px;flex-shrink:0;
+  }
+  .logo-text{font-family:'Big Shoulders Display',sans-serif;font-weight:800;font-size:19px;letter-spacing:0.02em;text-transform:uppercase;}
+  .logo-text span{color:var(--copper-bright);}
+  nav ul{list-style:none;display:flex;gap:28px;}
+  nav ul a{font-size:14px;text-decoration:none;color:var(--paper-dim);transition:color .15s;}
+  nav ul a:hover{color:var(--paper);}
+  .nav-cta{
+    display:flex;align-items:center;gap:10px;
+    background:var(--copper);color:var(--ink);
+    padding:9px 16px;font-weight:600;font-size:14px;text-decoration:none;
+    border:none;cursor:pointer;
+  }
+  .nav-cta:hover{background:var(--copper-bright);}
+  /* nav links + phone button are hidden on mobile, burger menu shows instead */
+  .nav-links,.nav-cta{display:none;}
+  @media(min-width:760px){.nav-links{display:flex;}.nav-cta{display:inline-flex;}}
+  .burger{display:flex;background:none;border:1px solid var(--line);color:var(--paper);padding:8px 10px;font-size:13px;cursor:pointer;}
+  @media(min-width:760px){.burger{display:none;}} /* burger only shows below 760px */
+  .mobile-menu{display:none;flex-direction:column;gap:2px;padding:0 24px 16px;border-bottom:1px solid var(--line);}
+  .mobile-menu.open{display:flex;} /* toggled by JS at the bottom of the page */
+  .mobile-menu a{padding:10px 0;font-size:14px;color:var(--paper-dim);text-decoration:none;border-top:1px solid var(--line);}
+
+  /* ===== HERO (top banner section) ===== */
+  .hero{padding:56px 0 72px;position:relative;overflow:hidden;}
+  .hero-grid{display:grid;gap:40px;align-items:center;}
+  @media(min-width:860px){.hero-grid{grid-template-columns:1.15fr 0.85fr;}} /* 2 columns on wider screens */
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.14em;
+    color:var(--copper-bright);text-transform:uppercase;margin-bottom:14px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .eyebrow::before{content:'';width:8px;height:8px;background:var(--safety);border-radius:50%;
+    box-shadow:0 0 0 3px rgba(232,185,63,0.18);} /* small status dot before eyebrow text */
+  h1{font-size:clamp(38px,6vw,64px);line-height:0.98;margin-bottom:20px;}
+  h1 .hl{color:var(--copper-bright);} /* wrap key word in <span class="hl"> to highlight it */
+  .hero p.lede{color:var(--paper-dim);font-size:17px;max-width:46ch;margin-bottom:28px;}
+  .btn-row{display:flex;flex-wrap:wrap;gap:12px;}
+  .btn{
+    padding:14px 22px;font-weight:600;font-size:15px;text-decoration:none;
+    display:inline-flex;align-items:center;gap:8px;border:1px solid transparent;cursor:pointer;
+    font-family:'IBM Plex Sans',sans-serif;
+  }
+  .btn-primary{background:var(--copper);color:var(--ink);}
+  .btn-primary:hover{background:var(--copper-bright);}
+  .btn-ghost{border-color:var(--line);color:var(--paper);background:transparent;}
+  .btn-ghost:hover{border-color:var(--copper-bright);color:var(--copper-bright);}
+
+  /* ===== JOB DOCKET CARD (the clipboard-style graphic in the hero) ===== */
+  .docket{
+    position:relative;background:var(--panel);border:1px solid var(--line);
+    padding:26px 24px 24px;max-width:360px;justify-self:center;
+  }
+  .docket::before{ /* the row of little punched holes along the top edge */
+    content:'';position:absolute;top:-6px;left:16px;right:16px;height:12px;
+    background-image:radial-gradient(circle,var(--ink) 3px,transparent 3.5px);
+    background-size:16px 12px;background-repeat:repeat-x;background-position:top center;
+  }
+  .docket-head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px dashed var(--line);padding-bottom:12px;margin-bottom:14px;}
+  .docket-head .mono{font-size:11px;color:var(--paper-dim);letter-spacing:0.08em;}
+  .docket-title{font-family:'Big Shoulders Display',sans-serif;font-weight:800;font-size:20px;text-transform:uppercase;}
+  .docket-row{display:flex;justify-content:space-between;font-size:13px;padding:7px 0;border-bottom:1px solid var(--line);}
+  .docket-row span:first-child{color:var(--paper-dim);}
+  .stamp{ /* the rotated "available today" stamp graphic */
+    position:absolute;top:20px;right:-14px;
+    border:3px solid var(--safety);color:var(--safety);
+    font-family:'Big Shoulders Display',sans-serif;font-weight:800;font-size:13px;
+    padding:5px 10px;transform:rotate(9deg);letter-spacing:0.06em;
+    animation:stampIn .5s cubic-bezier(.2,1.6,.4,1) .3s both;
+  }
+  @keyframes stampIn{from{opacity:0;transform:rotate(9deg) scale(1.8);}to{opacity:1;transform:rotate(9deg) scale(1);}}
+  @media(prefers-reduced-motion:reduce){.stamp{animation:none;}} /* respects OS "reduce motion" setting */
+
+  /* ===== TRUST BAR (the row of 4 quick stats) ===== */
+  .trust{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;}
+  .trust .wrap{display:flex;flex-wrap:wrap;gap:24px 40px;justify-content:space-between;}
+  .trust-item{font-size:13px;color:var(--paper-dim);display:flex;align-items:center;gap:8px;}
+  .trust-item strong{color:var(--paper);font-family:'Big Shoulders Display',sans-serif;font-size:20px;font-weight:800;}
+
+  /* ===== SERVICES GRID ===== */
+  section{padding:72px 0;}
+  .section-head{margin-bottom:36px;max-width:60ch;}
+  .section-head .eyebrow{margin-bottom:10px;}
+  h2{font-size:clamp(28px,4vw,40px);}
+  .services-grid{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);} /* 1px gap doubles as grid lines */
+  @media(min-width:640px){.services-grid{grid-template-columns:1fr 1fr;}}
+  @media(min-width:960px){.services-grid{grid-template-columns:1fr 1fr 1fr;}}
+  .service{background:var(--ink);padding:26px 22px;transition:background .15s;}
+  .service:hover{background:var(--panel);}
+  .service .code{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--copper-bright);letter-spacing:0.1em;margin-bottom:12px;display:block;}
+  .service h3{font-size:19px;margin-bottom:8px;font-weight:600;}
+  .service p{font-size:14px;color:var(--paper-dim);}
+
+  /* ===== RECENT WORK GALLERY ===== */
+  .work-grid{display:grid;gap:16px;}
+  @media(min-width:640px){.work-grid{grid-template-columns:repeat(3,1fr);}}
+  .work-card{aspect-ratio:4/3;position:relative;overflow:hidden;background:var(--panel);border:1px solid var(--line);}
+  .work-card .swatch{position:absolute;inset:0;opacity:0.9;} /* placeholder color block — swap for a real <img> later */
+  .work-card .cap{position:absolute;bottom:0;left:0;right:0;padding:14px;background:linear-gradient(to top,rgba(16,21,28,0.9),transparent);font-size:13px;}
+  .work-card .cap .mono{display:block;font-size:11px;color:var(--copper-bright);margin-top:2px;}
+
+  /* ===== TESTIMONIALS ===== */
+  .quotes{display:grid;gap:24px;}
+  @media(min-width:760px){.quotes{grid-template-columns:1fr 1fr;}}
+  .quote{border-left:2px solid var(--copper);padding-left:20px;}
+  .quote p{font-size:16px;color:var(--paper);margin-bottom:10px;}
+  .quote .who{font-size:13px;color:var(--paper-dim);}
+
+  /* ===== CONTACT / QUOTE FORM ===== */
+  .contact-panel{background:var(--panel);border:1px solid var(--line);padding:36px;display:grid;gap:32px;}
+  @media(min-width:800px){.contact-panel{grid-template-columns:1fr 1fr;padding:44px;}}
+  .field{margin-bottom:16px;}
+  .field label{display:block;font-size:12px;color:var(--paper-dim);margin-bottom:6px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.05em;}
+  .field input,.field select,.field textarea{
+    width:100%;background:var(--ink);border:1px solid var(--line);color:var(--paper);
+    padding:11px 12px;font-family:'IBM Plex Sans',sans-serif;font-size:14px;
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--copper-bright);}
+  .field-row{display:grid;gap:16px;}
+  @media(min-width:520px){.field-row{grid-template-columns:1fr 1fr;}}
+  .confirm{display:none;background:rgba(232,185,63,0.1);border:1px solid var(--safety);padding:14px 16px;font-size:13px;margin-top:10px;}
+  .confirm.show{display:block;} /* toggled on by JS after a successful submit */
+
+  /* ===== FOOTER ===== */
+  footer{border-top:1px solid var(--line);padding:36px 0;}
+  footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;font-size:13px;color:var(--paper-dim);}
+</style>
+</head>
+<body>
+
+<!-- ===================== HEADER ===================== -->
+<header>
+  <div class="nav">
+    <div class="logo">
+      <div class="logo-mark">[X]</div> <!-- first letter of business name -->
+      <div class="logo-text">[BUSINESS] <span>[NAME]</span></div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#work">Recent jobs</a></li>
+      <li><a href="#reviews">Reviews</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a class="nav-cta" href="tel:[PHONE]">☎ [PHONE DISPLAY]</a>
+    <button class="burger" id="burgerBtn">MENU</button>
+  </div>
+  <!-- mobile-only dropdown, shown/hidden by the JS at the bottom -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#services">Services</a>
+    <a href="#work">Recent jobs</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#contact">Contact</a>
+    <a href="tel:[PHONE]">Call [PHONE DISPLAY]</a>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">[SERVICE AREA] · Licensed &amp; Insured</div>
+      <h1>[HEADLINE PART 1] <span class="hl">[HIGHLIGHTED WORD]</span><br>[HEADLINE PART 2]</h1>
+      <p class="lede">[One or two sentences on what the business does and covers, suburbs, services, turnaround.]</p>
+      <div class="btn-row">
+        <a href="tel:[PHONE]" class="btn btn-primary">Call now , [PHONE DISPLAY]</a>
+        <a href="#contact" class="btn btn-ghost">Request a quote</a>
+      </div>
+    </div>
+
+    <!-- signature "job docket" graphic — purely visual, edit example values below -->
+    <div class="docket">
+      <span class="stamp">Available<br>today</span>
+      <div class="docket-head">
+        <div class="docket-title">Job Docket</div>
+        <div class="mono">#[JOB CODE]</div>
+      </div>
+      <div class="docket-row"><span>Job type</span><span>[EXAMPLE JOB TYPE]</span></div>
+      <div class="docket-row"><span>Suburb</span><span>[EXAMPLE SUBURB]</span></div>
+      <div class="docket-row"><span>Priority</span><span>Same-day</span></div>
+      <div class="docket-row"><span>ETA</span><span>Within 2 hrs</span></div>
+      <div class="docket-row" style="border-bottom:none;"><span>Status</span><span>Confirmed</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TRUST BAR (4 quick stats) ===================== -->
+<div class="trust">
+  <div class="wrap">
+    <div class="trust-item"><strong>[X yrs]</strong>&nbsp;trading in [SERVICE AREA]</div>
+    <div class="trust-item"><strong>[LICENCE]</strong>&nbsp;licensed &amp; fully insured</div>
+    <div class="trust-item"><strong>24/7</strong>&nbsp;emergency callouts</div>
+    <div class="trust-item"><strong>[X.X★]</strong>&nbsp;from [XXX+] local jobs</div>
+  </div>
+</div>
+
+<!-- ===================== SERVICES =====================
+     One .service block per thing the business offers.
+     Copy a block to add a service, delete one to remove it. -->
+<section id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">What we do</div>
+      <h2>[Section headline]</h2>
+    </div>
+    <div class="services-grid">
+      <div class="service">
+        <span class="code mono">[CODE-1]</span>
+        <h3>[Service 1 name]</h3>
+        <p>[One line on what this service covers.]</p>
+      </div>
+      <div class="service">
+        <span class="code mono">[CODE-2]</span>
+        <h3>[Service 2 name]</h3>
+        <p>[One line on what this service covers.]</p>
+      </div>
+      <div class="service">
+        <span class="code mono">[CODE-3]</span>
+        <h3>[Service 3 name]</h3>
+        <p>[One line on what this service covers.]</p>
+      </div>
+      <div class="service">
+        <span class="code mono">[CODE-4]</span>
+        <h3>[Service 4 name]</h3>
+        <p>[One line on what this service covers.]</p>
+      </div>
+      <div class="service">
+        <span class="code mono">[CODE-5]</span>
+        <h3>[Service 5 name]</h3>
+        <p>[One line on what this service covers.]</p>
+      </div>
+      <div class="service">
+        <span class="code mono">[CODE-6]</span>
+        <h3>[Service 6 name]</h3>
+        <p>[One line on what this service covers.]</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== RECENT WORK GALLERY =====================
+     .swatch is a placeholder color block. Swap it for a real photo
+     with <img src="..." class="swatch"> once you have job photos. -->
+<section id="work">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Recent jobs</div>
+      <h2>[Section headline]</h2>
+    </div>
+    <div class="work-grid">
+      <div class="work-card">
+        <div class="swatch" style="background:linear-gradient(135deg,#2a333f,#c17a43);"></div>
+        <div class="cap">[Job description]<span class="mono">[Suburb]</span></div>
+      </div>
+      <div class="work-card">
+        <div class="swatch" style="background:linear-gradient(135deg,#1a2330,#e8b93f);"></div>
+        <div class="cap">[Job description]<span class="mono">[Suburb]</span></div>
+      </div>
+      <div class="work-card">
+        <div class="swatch" style="background:linear-gradient(135deg,#242e3b,#e0985c);"></div>
+        <div class="cap">[Job description]<span class="mono">[Suburb]</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TESTIMONIALS ===================== -->
+<section id="reviews">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">What locals say</div>
+      <h2>[Section headline]</h2>
+    </div>
+    <div class="quotes">
+      <div class="quote">
+        <p>[Testimonial quote.]</p>
+        <div class="who">[Name], [Suburb]</div>
+      </div>
+      <div class="quote">
+        <p>[Testimonial quote.]</p>
+        <div class="who">[Name], [Suburb]</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CONTACT / QUOTE FORM =====================
+     Netlify Forms. Netlify scans this static HTML at deploy time for
+     data-netlify="true" and registers the form automatically, no
+     dashboard setup, no email swap, no activation step. Submissions
+     trigger a webhook into n8n for the client's lead-response automation. -->
+<section id="contact">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Get a quote</div>
+      <h2>[Section headline]</h2>
+    </div>
+    <div class="contact-panel">
+      <div>
+        <p style="color:var(--paper-dim);font-size:15px;margin-bottom:20px;">[One or two sentences on response time / what happens after they submit.]</p>
+        <a href="tel:[PHONE]" class="btn btn-primary">Call [PHONE DISPLAY]</a>
+      </div>
+      <form id="quoteForm" name="quote" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+        <!-- required so Netlify's build-time scanner links submissions to this form -->
+        <input type="hidden" name="form-name" value="quote">
+        <!-- honeypot: hidden from real visitors, catches spam bots that fill every field -->
+        <p style="position:absolute;left:-9999px;">
+          <label>Don't fill this out: <input name="bot-field"></label>
+        </p>
+
+        <div class="field-row">
+          <div class="field"><label for="name">Name</label><input id="name" name="Name" required></div>
+          <div class="field"><label for="phone">Phone</label><input id="phone" name="Phone" type="tel" required></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label for="suburb">Suburb</label><input id="suburb" name="Suburb" required></div>
+          <div class="field">
+            <label for="jobtype">Job type</label>
+            <!-- edit these options to match the client's actual services -->
+            <select id="jobtype" name="Job type">
+              <option>[Service 1]</option>
+              <option>[Service 2]</option>
+              <option>[Service 3]</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label for="details">What's happening?</label><textarea id="details" name="Details" rows="3" required></textarea></div>
+        <button type="submit" class="btn btn-primary">Request quote</button>
+        <!-- hidden until JS shows it after a successful/failed send -->
+        <div class="confirm" id="confirmMsg"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="wrap">
+    <div>© [YEAR] [BUSINESS NAME] · [LICENCE TYPE] Lic. [NUMBER]</div>
+    <div>Servicing [SUBURB] · [SUBURB] · [SUBURB]</div>
+  </div>
+</footer>
+
+<script>
+  // Toggle the mobile nav open/closed when the MENU button is tapped
+  document.getElementById('burgerBtn').addEventListener('click', function(){
+    document.getElementById('mobileMenu').classList.toggle('open');
+  });
+
+  // Handle the quote form: send it in the background (no page reload),
+  // then show a success or error message depending on the result.
+  document.getElementById('quoteForm').addEventListener('submit', function(e){
+    e.preventDefault(); // stop the normal full-page form submission
+    const form = e.target;
+    const confirmMsg = document.getElementById('confirmMsg');
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+
+    // Netlify Forms expects a standard URL-encoded POST to the page itself,
+    // not the multipart FormData object browsers send by default.
+    const encoded = new URLSearchParams(new FormData(form)).toString();
+
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: encoded
+    })
+    .then(function(response){
+      if (response.ok) {
+        // success: show green confirmation, clear the form
+        confirmMsg.textContent = "Request sent. We'll be in touch shortly.";
+        confirmMsg.style.borderColor = 'var(--safety)';
+        confirmMsg.classList.add('show');
+        form.reset();
+      } else {
+        throw new Error('Submission failed');
+      }
+    })
+    .catch(function(){
+      // failure: show red fallback message instead
+      confirmMsg.textContent = "Something went wrong sending that . please call us directly instead.";
+      confirmMsg.style.borderColor = '#e0645c';
+      confirmMsg.classList.add('show');
+    })
+    .finally(function(){
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Request quote';
+    });
+  });
+</script>
+
+</body>
+</html>
